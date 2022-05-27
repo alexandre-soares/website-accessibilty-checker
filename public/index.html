@@ -10,9 +10,10 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
-    <title>Website Accessibility Checker</title>
+    <title>Website Accessibility Tester</title>
     <style>
-      .loader {
+      .loader,
+      .hideButton {
         display: none;
       }
     </style>
@@ -21,29 +22,36 @@
     <div class="container-sm">
       <div class="card my-5 p-3 bg-dark text-light">
         <div class="card-body">
-          <h2 class="mb-3">Website Accessibility Checker</h2>
+          <h2 class="mb-3">Website Accessibility Tester</h2>
           <form id="form">
             <div class="input-group mb-3">
               <input
                 type="url"
                 id="url"
                 class="form-control"
-                placeholder="Enter an URL"
+                placeholder="Enter a website..."
               />
-              <button type="submit" class="btn btn-primary">Check</button>
+              <button type="submit" class="btn btn-primary">Submit</button>
             </div>
           </form>
+          <button id="clearResults" class="btn btn-danger hideButton">
+            Clear Results
+          </button>
+          <button id="csvBtn" class="btn btn-warning hideButton">
+            Download Csv
+          </button>
         </div>
       </div>
 
-      <div class="loader text-center my-3">
+      <div class="loader text-center">
         <div class="spinner-border" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-
+      <div id="number"></div>
       <div id="issues"></div>
     </div>
-    <script src="./js//main.js"></script>
+
+    <script src="js/main.js"></script>
   </body>
 </html>
