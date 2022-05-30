@@ -10,7 +10,7 @@
             </div>
           </form>
           <div v-if="showActionsButtons" class="actions">
-            <button id="clearResults" class="btn btn-danger">
+            <button id="clearResults" class="btn btn-danger" @click.prevent="clearResults">
                 Clear Results
             </button>
             <button id="csvBtn" class="btn btn-warning">
@@ -25,7 +25,7 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </div>
-      <div id="number"></div>
+      <div id="number" v-if="issues.length > 0"><p class="alert alert-warning">{{issues.length}} issues found !</p></div>
       <div id="issues" v-html="message">
 
       </div>
@@ -68,7 +68,6 @@
         methods: {
             // Fetch accessibility issues
             checkURL() {
-                console.log(this.url);
                 if (this.url === "") {
                     this.message = this.emptyUrl
                 } else {
@@ -90,6 +89,12 @@
                         this.message = this.alertMessage
                     })
                 }
+            },
+            //Clear results
+            clearResults() {
+                this.issues = []
+                this.message = ""
+                this.url = ""
             }
         },
     }
