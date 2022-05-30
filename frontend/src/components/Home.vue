@@ -64,7 +64,7 @@
             }
         },
         methods: {
-            // Fetch accessibility issues
+            // Fetch accessibility issues with Pa11y
             checkURL() {
                 if (this.url === "") {
                     this.message = this.emptyUrl
