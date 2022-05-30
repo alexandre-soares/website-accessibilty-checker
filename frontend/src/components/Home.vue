@@ -13,7 +13,7 @@
             <button id="clearResults" class="btn btn-danger" @click.prevent="clearResults">
                 Clear Results
             </button>
-            <button id="csvBtn" class="btn btn-warning">
+            <button id="csvBtn" class="btn btn-warning" @click.prevent="downloadCSV">
                 Download Csv
             </button>
           </div>
@@ -58,8 +58,6 @@
                 message: "",
                 issues: [],
                 emptyUrl: `<div class="alert alert-danger" role="alert">Please add an URL</div>`,
-                alertMessage: `<div class="alert alert-danger" role="alert">Something went wrong</div>`,
-                emptyUrl: `<div class="alert alert-danger" role="alert">Please add an URL</div>`,
                 warningMessage: `<div class="alert alert-warning" role="alert">no Issues Found</div>`,
                 CsvMessage: `<div class="alert alert-warning" role="alert">CSV not available</div>`,
 
@@ -75,18 +73,15 @@
                     this.isLoading = true
                     this.message = ''
 
-                     axios.get(`/api/test?url=${this.url}`).then((response) => {
-                        console.log(response.data)
+                    axios.get(`/api/test?url=${this.url}`).then((response) => {
                         this.issues = response.data.issues
-                         
                         this.isLoading = false
-
                         this.showActionsButtons= true
-                    }) .catch(function (error) {
+                    }).catch((error) => {
                         // handle error
-                        console.log(error);
+                        console.log(error.response.data);
                         this.isLoading = false
-                        this.message = this.alertMessage
+                        this.message = `<div class="alert alert-danger" role="alert">${error.response.data}</div>`
                     })
                 }
             },
@@ -95,6 +90,30 @@
                 this.issues = []
                 this.message = ""
                 this.url = ""
+            },
+            async downloadCSV() {
+                if (this.url === "") {
+                    this.message = this.emptyUrl;
+                } else {
+                    if (this.issues.length === 0) {
+                        alert(CsvMessage);
+                    } else {
+                        const csv = this.issues
+                            .map((issue) => {
+                            return `${issue.code},${issue.message},${issue.context}`;
+                            })
+                            .join("\n");
+
+                        const csvBlob = new Blob([csv], { type: "text/csv" });
+                        const csvUrl = URL.createObjectURL(csvBlob);
+                        const link = document.createElement("a");
+                        link.href = csvUrl;
+                        link.download = "Accessibility_issues_list_" + this.url.substring(12) + ".csv";
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                }
             }
         },
     }
